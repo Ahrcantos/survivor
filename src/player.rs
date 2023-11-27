@@ -8,7 +8,9 @@ use bevy::{
 };
 use bevy_rapier2d::prelude::{Collider, RapierContext, Sensor};
 
-use crate::{enemy::Enemy, mouse_position::MouseWorldPosition, ui::Score};
+use crate::{
+    ability::DashAbilityCooldown, enemy::Enemy, mouse_position::MouseWorldPosition, ui::Score,
+};
 
 pub struct PlayerPlugin;
 
@@ -112,10 +114,11 @@ const DASH_DISTANCE: f32 = 60.0;
 fn player_dash(
     mut player_query: Query<(&mut Transform, &Direction), With<Player>>,
     keyboard_input: Res<Input<KeyCode>>,
+    mut cooldown: ResMut<DashAbilityCooldown>,
 ) {
     let (mut player_transform, player_direction) = player_query.single_mut();
 
-    if keyboard_input.just_pressed(KeyCode::ShiftLeft) {
+    if keyboard_input.just_pressed(KeyCode::ShiftLeft) && cooldown.available() {
         let offset = match player_direction {
             Direction::North => Vec3::new(0.0, DASH_DISTANCE, 0.0),
             Direction::South => Vec3::new(0.0, -DASH_DISTANCE, 0.0),
@@ -128,6 +131,7 @@ fn player_dash(
         };
 
         player_transform.translation += offset;
+        cooldown.consume();
     }
 }
 

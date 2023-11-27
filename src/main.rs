@@ -1,3 +1,4 @@
+mod ability;
 mod enemy;
 mod mouse_position;
 mod player;
@@ -6,6 +7,7 @@ mod ui;
 use bevy::prelude::*;
 use bevy_rapier2d::prelude::*;
 
+use self::ability::AbilityPlugin;
 use self::enemy::EnemyPlugin;
 use self::mouse_position::MousePositionPlugin;
 use self::player::PlayerPlugin;
@@ -19,6 +21,7 @@ fn main() {
             EnemyPlugin,
             MousePositionPlugin,
             UiPlugin,
+            AbilityPlugin,
             RapierPhysicsPlugin::<NoUserData>::pixels_per_meter(100.0),
             #[cfg(debug_assertions)]
             RapierDebugRenderPlugin::default(),

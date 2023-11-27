@@ -23,7 +23,7 @@ pub struct UiPlugin;
 impl Plugin for UiPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<Score>()
-            .add_systems(Startup, setup)
+            .add_systems(Startup, setup_score)
             .add_systems(Update, update_score_text);
     }
 }
@@ -31,7 +31,7 @@ impl Plugin for UiPlugin {
 #[derive(Component)]
 struct ScoreText;
 
-fn setup(mut commands: Commands, score: Res<Score>) {
+fn setup_score(mut commands: Commands, score: Res<Score>) {
     let text = format!("Score: {}", score.count());
     commands.spawn((
         TextBundle::from_section(
